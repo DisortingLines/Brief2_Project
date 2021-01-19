@@ -52,6 +52,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "UseItem",
+                    "type": "Button",
+                    "id": "cb935cde-cc67-47e4-8671-ad10f1d8e833",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -157,11 +165,22 @@
                 {
                     "name": "",
                     "id": "b765be51-f0b2-484e-b217-1a02725982ea",
-                    "path": "oard>/erd>/e",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "KBM",
                     "action": "Grab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c430c7b0-8264-453f-b700-d5520d8aff04",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KBM",
+                    "action": "UseItem",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

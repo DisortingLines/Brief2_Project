@@ -65,6 +65,14 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""UseItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""cb935cde-cc67-47e4-8671-ad10f1d8e833"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -170,11 +178,22 @@ public class @InputActions : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""b765be51-f0b2-484e-b217-1a02725982ea"",
-                    ""path"": ""oard>/erd>/e"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""KBM"",
                     ""action"": ""Grab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c430c7b0-8264-453f-b700-d5520d8aff04"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KBM"",
+                    ""action"": ""UseItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -208,6 +227,7 @@ public class @InputActions : IInputActionCollection, IDisposable
         m_InGame_LookX = m_InGame.FindAction("LookX", throwIfNotFound: true);
         m_InGame_LookY = m_InGame.FindAction("LookY", throwIfNotFound: true);
         m_InGame_Grab = m_InGame.FindAction("Grab", throwIfNotFound: true);
+        m_InGame_UseItem = m_InGame.FindAction("UseItem", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -263,6 +283,7 @@ public class @InputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_InGame_LookX;
     private readonly InputAction m_InGame_LookY;
     private readonly InputAction m_InGame_Grab;
+    private readonly InputAction m_InGame_UseItem;
     public struct InGameActions
     {
         private @InputActions m_Wrapper;
@@ -273,6 +294,7 @@ public class @InputActions : IInputActionCollection, IDisposable
         public InputAction @LookX => m_Wrapper.m_InGame_LookX;
         public InputAction @LookY => m_Wrapper.m_InGame_LookY;
         public InputAction @Grab => m_Wrapper.m_InGame_Grab;
+        public InputAction @UseItem => m_Wrapper.m_InGame_UseItem;
         public InputActionMap Get() { return m_Wrapper.m_InGame; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -300,6 +322,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Grab.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnGrab;
                 @Grab.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnGrab;
                 @Grab.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnGrab;
+                @UseItem.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnUseItem;
+                @UseItem.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnUseItem;
+                @UseItem.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnUseItem;
             }
             m_Wrapper.m_InGameActionsCallbackInterface = instance;
             if (instance != null)
@@ -322,6 +347,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Grab.started += instance.OnGrab;
                 @Grab.performed += instance.OnGrab;
                 @Grab.canceled += instance.OnGrab;
+                @UseItem.started += instance.OnUseItem;
+                @UseItem.performed += instance.OnUseItem;
+                @UseItem.canceled += instance.OnUseItem;
             }
         }
     }
@@ -343,5 +371,6 @@ public class @InputActions : IInputActionCollection, IDisposable
         void OnLookX(InputAction.CallbackContext context);
         void OnLookY(InputAction.CallbackContext context);
         void OnGrab(InputAction.CallbackContext context);
+        void OnUseItem(InputAction.CallbackContext context);
     }
 }
