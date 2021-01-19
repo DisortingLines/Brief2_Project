@@ -57,6 +57,14 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Grab"",
+                    ""type"": ""Button"",
+                    ""id"": ""bf8c6f01-7f75-452f-8314-fd87cf4ea352"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -158,6 +166,17 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""action"": ""LookY"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b765be51-f0b2-484e-b217-1a02725982ea"",
+                    ""path"": ""oard>/erd>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Grab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -188,6 +207,7 @@ public class @InputActions : IInputActionCollection, IDisposable
         m_InGame_Sprint = m_InGame.FindAction("Sprint", throwIfNotFound: true);
         m_InGame_LookX = m_InGame.FindAction("LookX", throwIfNotFound: true);
         m_InGame_LookY = m_InGame.FindAction("LookY", throwIfNotFound: true);
+        m_InGame_Grab = m_InGame.FindAction("Grab", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -242,6 +262,7 @@ public class @InputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_InGame_Sprint;
     private readonly InputAction m_InGame_LookX;
     private readonly InputAction m_InGame_LookY;
+    private readonly InputAction m_InGame_Grab;
     public struct InGameActions
     {
         private @InputActions m_Wrapper;
@@ -251,6 +272,7 @@ public class @InputActions : IInputActionCollection, IDisposable
         public InputAction @Sprint => m_Wrapper.m_InGame_Sprint;
         public InputAction @LookX => m_Wrapper.m_InGame_LookX;
         public InputAction @LookY => m_Wrapper.m_InGame_LookY;
+        public InputAction @Grab => m_Wrapper.m_InGame_Grab;
         public InputActionMap Get() { return m_Wrapper.m_InGame; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -275,6 +297,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @LookY.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnLookY;
                 @LookY.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnLookY;
                 @LookY.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnLookY;
+                @Grab.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnGrab;
+                @Grab.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnGrab;
+                @Grab.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnGrab;
             }
             m_Wrapper.m_InGameActionsCallbackInterface = instance;
             if (instance != null)
@@ -294,6 +319,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @LookY.started += instance.OnLookY;
                 @LookY.performed += instance.OnLookY;
                 @LookY.canceled += instance.OnLookY;
+                @Grab.started += instance.OnGrab;
+                @Grab.performed += instance.OnGrab;
+                @Grab.canceled += instance.OnGrab;
             }
         }
     }
@@ -314,5 +342,6 @@ public class @InputActions : IInputActionCollection, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnLookX(InputAction.CallbackContext context);
         void OnLookY(InputAction.CallbackContext context);
+        void OnGrab(InputAction.CallbackContext context);
     }
 }

@@ -17,7 +17,10 @@ public class PlayerController : MonoBehaviour
     public float defaultSpeed = 3f;
     public float jumpVelocity = 5f;
     public LayerMask groundLayers;
+
+    public Transform objectDestination;
     #endregion
+
 
     void Awake()
     {
@@ -78,5 +81,13 @@ public class PlayerController : MonoBehaviour
     bool IsGrounded()
     {
         return Physics.CheckCapsule(col.bounds.center, new Vector3(col.bounds.center.x, col.bounds.min.y, col.bounds.center.z), 0.01f, groundLayers);
+    }
+
+    public void GrabObj(GameObject grabbed)
+    {
+        grabbed.GetComponent<Rigidbody>().useGravity = false;
+        grabbed.transform.position = objectDestination.position;
+        grabbed.transform.parent = GameObject.Find("ObjectDestination").transform; 
+
     }
 }
