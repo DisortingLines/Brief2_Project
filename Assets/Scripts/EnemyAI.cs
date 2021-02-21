@@ -12,24 +12,30 @@ public class EnemyAI : MonoBehaviour
     public float sightRadius;
     public float sightAngle;
 
+    public List<Collider> overlaps;
+
     bool hasSeenPlayer = false;
 
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindWithTag("Player");
+
+        overlaps.Add(player.GetComponent<Collider>());
     }
     void Update()
     {
         hasSeenPlayer = SeenPlayer(transform, player.transform, sightAngle, sightRadius);
+
+        if(hasSeenPlayer)
+        {
+            agent.SetDestination(player.transform.position);
+        }
     }
 
-    public static bool SeenPlayer(Transform checkingObj, Transform target, float maxAngle, float maxRadius)
+    public bool SeenPlayer(Transform checkingObj, Transform target, float maxAngle, float maxRadius)
     {
-        Collider[] overlaps = new Collider[10];
-        int count = Physics.OverlapSphereNonAlloc(checkingObj.position, maxRadius, overlaps);
-
-        for(int i = 0; i < count + 1; i++)
+        for(int i = 0; i < overlaps.Count; i++)
         {
             if(overlaps[i].transform == target)
             {
@@ -53,7 +59,6 @@ public class EnemyAI : MonoBehaviour
                 }
             }
         }
-
         return false;
     }
 
