@@ -73,6 +73,22 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Crouch"",
+                    ""type"": ""Button"",
+                    ""id"": ""00727765-f700-4df3-8913-2dc82d3f1efa"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""Stand"",
+                    ""type"": ""Button"",
+                    ""id"": ""02a71b45-488b-4e33-aaf2-9bdc59a54a89"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold""
                 }
             ],
             ""bindings"": [
@@ -196,6 +212,28 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""action"": ""UseItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""013ccc15-e21a-4e42-893a-9226fcb21152"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KBM"",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9c04e284-42e1-4bb3-9dab-b30fc2c76ba7"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KBM"",
+                    ""action"": ""Stand"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -228,6 +266,8 @@ public class @InputActions : IInputActionCollection, IDisposable
         m_InGame_LookY = m_InGame.FindAction("LookY", throwIfNotFound: true);
         m_InGame_Grab = m_InGame.FindAction("Grab", throwIfNotFound: true);
         m_InGame_UseItem = m_InGame.FindAction("UseItem", throwIfNotFound: true);
+        m_InGame_Crouch = m_InGame.FindAction("Crouch", throwIfNotFound: true);
+        m_InGame_Stand = m_InGame.FindAction("Stand", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -284,6 +324,8 @@ public class @InputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_InGame_LookY;
     private readonly InputAction m_InGame_Grab;
     private readonly InputAction m_InGame_UseItem;
+    private readonly InputAction m_InGame_Crouch;
+    private readonly InputAction m_InGame_Stand;
     public struct InGameActions
     {
         private @InputActions m_Wrapper;
@@ -295,6 +337,8 @@ public class @InputActions : IInputActionCollection, IDisposable
         public InputAction @LookY => m_Wrapper.m_InGame_LookY;
         public InputAction @Grab => m_Wrapper.m_InGame_Grab;
         public InputAction @UseItem => m_Wrapper.m_InGame_UseItem;
+        public InputAction @Crouch => m_Wrapper.m_InGame_Crouch;
+        public InputAction @Stand => m_Wrapper.m_InGame_Stand;
         public InputActionMap Get() { return m_Wrapper.m_InGame; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -325,6 +369,12 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @UseItem.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnUseItem;
                 @UseItem.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnUseItem;
                 @UseItem.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnUseItem;
+                @Crouch.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnCrouch;
+                @Crouch.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnCrouch;
+                @Crouch.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnCrouch;
+                @Stand.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnStand;
+                @Stand.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnStand;
+                @Stand.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnStand;
             }
             m_Wrapper.m_InGameActionsCallbackInterface = instance;
             if (instance != null)
@@ -350,6 +400,12 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @UseItem.started += instance.OnUseItem;
                 @UseItem.performed += instance.OnUseItem;
                 @UseItem.canceled += instance.OnUseItem;
+                @Crouch.started += instance.OnCrouch;
+                @Crouch.performed += instance.OnCrouch;
+                @Crouch.canceled += instance.OnCrouch;
+                @Stand.started += instance.OnStand;
+                @Stand.performed += instance.OnStand;
+                @Stand.canceled += instance.OnStand;
             }
         }
     }
@@ -372,5 +428,7 @@ public class @InputActions : IInputActionCollection, IDisposable
         void OnLookY(InputAction.CallbackContext context);
         void OnGrab(InputAction.CallbackContext context);
         void OnUseItem(InputAction.CallbackContext context);
+        void OnCrouch(InputAction.CallbackContext context);
+        void OnStand(InputAction.CallbackContext context);
     }
 }
