@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 171699215}
   - component: {fileID: 171699218}
   - component: {fileID: 171699219}
+  - component: {fileID: 171699220}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -337,9 +338,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerObj: {fileID: 2000276261}
-  sensitivity: 6
+  sensitivity: 8
   ySensMultiplier: 0.8
   mouseInput: {x: 0, y: 0}
+--- !u!95 &171699220
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 171699214}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a9924aee5156d2b43988c33691d37b9b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &294480060 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7170024102975129495, guid: d2ef35c26fcac7b4db77bf343e937131,
@@ -850,8 +870,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08dbd6189e73246a69b9b6780e95e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  throwForce: 550
+  throwForce: 700
   rb: {fileID: 0}
+  alertRadius: 10
 --- !u!82 &1320681843
 AudioSource:
   m_ObjectHideFlags: 0
@@ -983,8 +1004,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 1697806100}
   player: {fileID: 2000276261}
-  sightRadius: 7
-  sightAngle: 45
+  sightRadius: 8
+  sightAngle: 50
   overlaps: []
 --- !u!136 &1697806096
 CapsuleCollider:
@@ -1476,6 +1497,7 @@ GameObject:
   - component: {fileID: 2000276262}
   - component: {fileID: 2000276267}
   - component: {fileID: 2000276266}
+  - component: {fileID: 2000276268}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1586,7 +1608,11 @@ MonoBehaviour:
   TargetDistance: 5
   grabRange: 3
   grabbedObj: {fileID: 0}
+  alertRange: 1
+  walkAlertRange: 3
+  runAlertRange: 7
   objectDestination: {fileID: 1057370102}
+  lastPos: {x: 0, y: 0, z: 0}
 --- !u!54 &2000276267
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1603,6 +1629,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!95 &2000276268
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000276261}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7a2a51a3bf8d6f84fab4580099ad7ecd, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2009102758 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -4866775405746322422, guid: d2ef35c26fcac7b4db77bf343e937131,
@@ -1640,7 +1685,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!65 &2145838989
 BoxCollider:

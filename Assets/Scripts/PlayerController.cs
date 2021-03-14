@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.AI;
 
 
 public class PlayerController : MonoBehaviour
@@ -23,15 +24,16 @@ public class PlayerController : MonoBehaviour
     public float TargetDistance;
     public float grabRange = 3f;
     public GameObject grabbedObj;
-   // public bool isCrouching;
-   // public bool isStanding;
-       
-    //public float initialHeight = 1f;
-    //public float crouchingHeight = .2f;
+    [Space]
+    public float alertRange;
+    public float walkAlertRange;
+    public float runAlertRange;
+    
     public Transform objectDestination;
-    //public bool isStanding = true;
 
     private Animator anim;
+    [SerializeField]
+    Vector3 lastPos;
 
     #endregion
 
@@ -65,6 +67,36 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Move(inputActions.InGame.Move.ReadValue<Vector2>());
+
+        if (transform.position == lastPos)
+        {
+            alertRange = 1f;
+        }
+        else if (transform.position != lastPos && moveSpeed == defaultSpeed)
+        {
+            alertRange = walkAlertRange;
+        }
+        else if (transform.position != lastPos && moveSpeed == runSpeed)
+        {
+            alertRange = runAlertRange;
+        }
+    }
+
+    private void LateUpdate()
+    {
+        lastPos = transform.position;
+    }
+
+    private void FixedUpdate()
+    {
+        Collider[] hitCols = Physics.OverlapSphere(lastPos, alertRange);
+        foreach(var hitCol in hitCols)
+        {
+            if(hitCol.gameObject.tag == "Enemy")
+            {
+                hitCol.gameObject.GetComponent<NavMeshAgent>().SetDestination(lastPos);
+            }
+        }
     }
 
     void OnEnable()
@@ -164,5 +196,12 @@ public class PlayerController : MonoBehaviour
     public void Stand()
     {
         anim.Play("PlayerStanding");
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+
+        Gizmos.DrawWireSphere(transform.position, alertRange);
     }
 }
