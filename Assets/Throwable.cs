@@ -7,6 +7,9 @@ public class Throwable : MonoBehaviour
 {
     public float throwForce = 10f;
     public Rigidbody rb;
+    public GameObject brokenObject;
+    public bool wasThrown;
+    public bool canBreak;
 
     public float alertRadius = 5f;
 
@@ -18,6 +21,19 @@ public class Throwable : MonoBehaviour
     public void Throw()
     {
         rb.AddForce(transform.forward * throwForce, ForceMode.Force);
+
+        wasThrown = true;
+    
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        if (wasThrown && canBreak)
+        {
+            GameObject instObj = brokenObject;
+            Instantiate(instObj, gameObject.transform.position, gameObject.transform.rotation);
+            Destroy(gameObject);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -41,3 +57,4 @@ public class Throwable : MonoBehaviour
     */
 
 }
+
