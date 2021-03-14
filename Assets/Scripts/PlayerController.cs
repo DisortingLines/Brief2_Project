@@ -19,6 +19,13 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 3f;
     public float runSpeed = 5f;
     public float defaultSpeed = 3f;
+    public float crouchSpeed = 0.5f;
+    public float crouchRunSpeed = 3.5f;
+    public float defaultRunSpeed = 5f;
+
+    [SerializeField]
+    private bool isCrouching = false;
+
     public float jumpVelocity = 5f;
     public LayerMask groundLayers;
     public float TargetDistance;
@@ -61,7 +68,6 @@ public class PlayerController : MonoBehaviour
         col = GetComponent<CapsuleCollider>();
         cam = GetComponentInChildren<Camera>();
         anim = GetComponent<Animator>();
-
     }
 
     void Update()
@@ -131,13 +137,22 @@ public class PlayerController : MonoBehaviour
     }
     void StopSprint()
     {
-        moveSpeed = defaultSpeed;
+        if (isCrouching)
+        {
+            moveSpeed = crouchSpeed;
+        }
+        else
+        {
+            moveSpeed = defaultSpeed;
+        }
     }
+
 
     public bool IsGrounded()
     {
         return Physics.CheckCapsule(col.bounds.center, new Vector3(col.bounds.center.x, col.bounds.min.y, col.bounds.center.z), 0.01f, groundLayers);
     }
+
 
     public void GrabObj()
     {
@@ -189,12 +204,19 @@ public class PlayerController : MonoBehaviour
     }
     public void Crouch()
     {
+        isCrouching = true;
+        moveSpeed = crouchSpeed;
+        runSpeed = crouchRunSpeed;
+
         anim.Play("PlayerCrouching");
-        
-        
     }
     public void Stand()
     {
+
+        isCrouching = false;
+        moveSpeed = defaultSpeed;
+        runSpeed = defaultRunSpeed;
+
         anim.Play("PlayerStanding");
     }
 
