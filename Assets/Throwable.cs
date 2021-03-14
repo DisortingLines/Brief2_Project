@@ -28,16 +28,6 @@ public class Throwable : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
-        if (wasThrown && canBreak)
-        {
-            GameObject instObj = brokenObject;
-            Instantiate(instObj, gameObject.transform.position, gameObject.transform.rotation);
-            Destroy(gameObject);
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, alertRadius);
         foreach(var hitCollider in hitColliders)
         {
@@ -46,7 +36,15 @@ public class Throwable : MonoBehaviour
                 hitCollider.gameObject.GetComponent<NavMeshAgent>().SetDestination(transform.position);
             }
         }
+
+        if (wasThrown && canBreak)
+        {
+            GameObject instObj = brokenObject;
+            Instantiate(instObj, gameObject.transform.position, gameObject.transform.rotation);
+            Destroy(gameObject);
+        }
     }
+
 
     /*public void OnDrawGizmos()
     {
