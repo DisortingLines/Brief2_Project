@@ -872,6 +872,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   throwForce: 700
   rb: {fileID: 0}
+  brokenObject: {fileID: 0}
+  wasThrown: 0
+  canBreak: 0
   alertRadius: 10
 --- !u!82 &1320681843
 AudioSource:
@@ -1600,7 +1603,9 @@ MonoBehaviour:
   cam: {fileID: 0}
   moveSpeed: 3
   runSpeed: 5
+  crouchRunSpeed: 4
   defaultSpeed: 3
+  crouchSpeed: 2
   jumpVelocity: 5
   groundLayers:
     serializedVersion: 2
@@ -1611,8 +1616,12 @@ MonoBehaviour:
   alertRange: 1
   walkAlertRange: 3
   runAlertRange: 7
+  crouchWalkAlertRange: 2
+  crouchRunAlertRange: 5
+  standFOV: 90
+  crouchFOVMultiplier: 0.9
+  fovChangeSpeed: 1
   objectDestination: {fileID: 1057370102}
-  lastPos: {x: 0, y: 0, z: 0}
 --- !u!54 &2000276267
 Rigidbody:
   m_ObjectHideFlags: 0

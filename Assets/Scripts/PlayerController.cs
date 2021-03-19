@@ -18,7 +18,9 @@ public class PlayerController : MonoBehaviour
     [Header("Variables")]
     public float moveSpeed = 3f;
     public float runSpeed = 5f;
+    public float crouchRunSpeed = 4f;
     public float defaultSpeed = 3f;
+    public float crouchSpeed = 2f;
     public float jumpVelocity = 5f;
     public LayerMask groundLayers;
     public float TargetDistance;
@@ -28,12 +30,19 @@ public class PlayerController : MonoBehaviour
     public float alertRange;
     public float walkAlertRange;
     public float runAlertRange;
-    
+    public float crouchWalkAlertRange;
+    public float crouchRunAlertRange;
+    [Space]
+    public float standFOV = 90f;
+    public float crouchFOVMultiplier = .9f;
+    [Range(0, 1)]
+    public float fovChangeSpeed;
+
     public Transform objectDestination;
 
     private Animator anim;
-    [SerializeField]
     Vector3 lastPos;
+    bool isCrouching = false;
 
     #endregion
 
@@ -51,8 +60,7 @@ public class PlayerController : MonoBehaviour
 
         inputActions.InGame.UseItem.performed += _ => ThrowObj();
 
-        inputActions.InGame.Crouch.performed += _ => Crouch();
-        inputActions.InGame.Crouch.performed += _ => Stand();
+        inputActions.InGame.Crouch.performed += _ => ToggleCrouch();
     }
 
     void Start()
@@ -61,24 +69,44 @@ public class PlayerController : MonoBehaviour
         col = GetComponent<CapsuleCollider>();
         cam = GetComponentInChildren<Camera>();
         anim = GetComponent<Animator>();
+        isCrouching = false;
 
+        anim.Play("PlayerStanding");
     }
 
     void Update()
     {
         Move(inputActions.InGame.Move.ReadValue<Vector2>());
 
-        if (transform.position == lastPos)
+        if (isCrouching)
         {
-            alertRange = 1f;
+            if (transform.position == lastPos)
+            {
+                alertRange = .75f;
+            }
+            else if (transform.position != lastPos && moveSpeed == crouchSpeed)
+            {
+                alertRange = crouchWalkAlertRange;
+            }
+            else if (transform.position != lastPos && moveSpeed == crouchRunSpeed)
+            {
+                alertRange = crouchRunAlertRange;
+            }
         }
-        else if (transform.position != lastPos && moveSpeed == defaultSpeed)
+        else
         {
-            alertRange = walkAlertRange;
-        }
-        else if (transform.position != lastPos && moveSpeed == runSpeed)
-        {
-            alertRange = runAlertRange;
+            if (transform.position == lastPos)
+            {
+                alertRange = 1f;
+            }
+            else if (transform.position != lastPos && moveSpeed == defaultSpeed)
+            {
+                alertRange = walkAlertRange;
+            }
+            else if (transform.position != lastPos && moveSpeed == runSpeed)
+            {
+                alertRange = runAlertRange;
+            }
         }
     }
 
@@ -127,11 +155,17 @@ public class PlayerController : MonoBehaviour
 
     void StartSprint()
     {
-        moveSpeed = runSpeed;
+        if (isCrouching)
+            moveSpeed = crouchRunSpeed;
+        else
+            moveSpeed = runSpeed;
     }
     void StopSprint()
     {
-        moveSpeed = defaultSpeed;
+        if (isCrouching)
+            moveSpeed = crouchSpeed;
+        else
+            moveSpeed = defaultSpeed;
     }
 
     public bool IsGrounded()
@@ -173,7 +207,6 @@ public class PlayerController : MonoBehaviour
             grabbedObj.transform.parent = null;
             grabbedObj = null;
         }
-
     }
 
     public void ThrowObj()
@@ -187,15 +220,26 @@ public class PlayerController : MonoBehaviour
             grabbedObj.transform.parent = null;
         }
     }
-    public void Crouch()
+    public void ToggleCrouch()
     {
-        anim.Play("PlayerCrouching");
-        
-        
-    }
-    public void Stand()
-    {
-        anim.Play("PlayerStanding");
+        if(!isCrouching)
+        {
+            anim.Play("PlayerCrouching");
+
+            isCrouching = true;
+
+            cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, cam.fieldOfView * crouchFOVMultiplier, fovChangeSpeed);
+        }
+        else if (isCrouching)
+        {
+            anim.Play("PlayerStanding");
+
+            isCrouching = false;
+
+            cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, standFOV, fovChangeSpeed);
+        }
+
+        StopSprint();
     }
 
     void OnDrawGizmos()
