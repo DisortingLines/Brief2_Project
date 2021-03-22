@@ -11,6 +11,8 @@ public class Throwable : MonoBehaviour
     public bool wasThrown;
     public bool canBreak;
 
+    public float stunTime = 3f;
+
     public float alertRadius = 5f;
 
     void Start()
@@ -35,6 +37,13 @@ public class Throwable : MonoBehaviour
             {
                 hitCollider.gameObject.GetComponent<NavMeshAgent>().SetDestination(transform.position);
             }
+        }
+
+        if (other.gameObject.tag == "Enemy")
+        {
+            EnemyAI ai = other.gameObject.GetComponent<EnemyAI>();
+            if (ai != null)
+                StartCoroutine(ai.StunAI(stunTime));
         }
 
         if (wasThrown && canBreak)

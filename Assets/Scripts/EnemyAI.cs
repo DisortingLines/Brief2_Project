@@ -62,6 +62,17 @@ public class EnemyAI : MonoBehaviour
         return false;
     }
 
+    public IEnumerator StunAI(float stunTime)
+    {
+        agent.isStopped = true;
+
+        Debug.Log("i should be stoping");
+        yield return new WaitForSeconds(stunTime);
+        agent.isStopped = false;
+
+        Debug.Log("i should be going");
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
