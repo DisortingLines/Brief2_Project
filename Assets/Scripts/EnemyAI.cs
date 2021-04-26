@@ -15,6 +15,9 @@ public class EnemyAI : MonoBehaviour
     public List<Collider> overlaps;
 
     bool hasSeenPlayer = false;
+    bool isPatrolling;
+
+    public float patrolRadius = 3f;
 
     void Awake()
     {
@@ -23,14 +26,17 @@ public class EnemyAI : MonoBehaviour
 
         overlaps.Add(player.GetComponent<Collider>());
     }
+
     void Update()
     {
         hasSeenPlayer = SeenPlayer(transform, player.transform, sightAngle, sightRadius);
 
         if(hasSeenPlayer)
         {
+            StopCoroutine(Patrol());
             agent.SetDestination(player.transform.position);
         }
+        else { StartCoroutine(Patrol()); }
     }
 
     public bool SeenPlayer(Transform checkingObj, Transform target, float maxAngle, float maxRadius)
@@ -93,5 +99,32 @@ public class EnemyAI : MonoBehaviour
         //Forward facing
         Gizmos.color = Color.black;
         Gizmos.DrawRay(transform.position, transform.forward * sightRadius);
+
+        //Patrol Radius
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, patrolRadius);
+    }
+
+    IEnumerator Patrol()
+    {
+        if (isPatrolling || hasSeenPlayer)
+            yield break;
+
+        while(true)
+        {
+            isPatrolling = true;
+
+            yield return new WaitForSeconds(3f);
+
+            Vector3 pos = transform.position + new Vector3(Random.Range(-patrolRadius, patrolRadius), Random.Range(-patrolRadius, patrolRadius), Random.Range(-patrolRadius, patrolRadius));
+
+            agent.SetDestination(pos);
+
+            bool pathDone = (agent.pathStatus == NavMeshPathStatus.PathComplete);
+
+            yield return new WaitUntil(()=> pathDone);
+
+            isPatrolling = false;
+        }
     }
 }

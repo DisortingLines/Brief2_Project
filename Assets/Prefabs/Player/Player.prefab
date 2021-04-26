@@ -139,7 +139,7 @@ MonoBehaviour:
   jumpVelocity: 5
   groundLayers:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 64
   TargetDistance: 5
   grabRange: 3
   grabbedObj: {fileID: 0}

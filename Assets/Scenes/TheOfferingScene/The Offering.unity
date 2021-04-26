@@ -694,7 +694,7 @@ GameObject:
   - component: {fileID: 47690779}
   - component: {fileID: 47690778}
   - component: {fileID: 47690777}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10761,6 +10761,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 3723931070611351816, guid: 6c22c6bae1c748c42896b6fc6512f339,
+        type: 3}
+      propertyPath: groundLayers.m_Bits
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 3723931070611351819, guid: 6c22c6bae1c748c42896b6fc6512f339,
         type: 3}
