@@ -13,7 +13,7 @@ public class LightFlicker : MonoBehaviour
     void Start()
     {
         testLight = GetComponent<Light>();
-        StartCoroutine(Flashing());
+        //StartCoroutine(Flashing());
     }
 
     IEnumerator Flashing()
@@ -22,7 +22,25 @@ public class LightFlicker : MonoBehaviour
         {
             yield return new WaitForSeconds(Random.Range(minWaitTime, maxWaitTime));
             testLight.enabled = !testLight.enabled;
+            Debug.Log("Light flickered");
 
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Enemy"))
+        {
+            StartCoroutine(Flashing());
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.CompareTag("Enemy"))
+        {
+            StopCoroutine(Flashing());
+            testLight.enabled = true;
         }
     }
 }
