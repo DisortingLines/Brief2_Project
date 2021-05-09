@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody rb;
     public CapsuleCollider col;
     public Camera cam;
+    public GameObject deathCanvas;
 
     [Space]
     [Header("Variables")]
@@ -240,6 +241,15 @@ public class PlayerController : MonoBehaviour
         }
 
         StopSprint();
+    }
+
+    public void Die()
+    {
+        inputActions.Disable();
+
+        Cursor.lockState = CursorLockMode.None;
+
+        deathCanvas.SetActive(true);
     }
 
     void OnDrawGizmos()

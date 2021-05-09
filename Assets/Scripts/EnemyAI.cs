@@ -127,4 +127,12 @@ public class EnemyAI : MonoBehaviour
             isPatrolling = false;
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Player"))
+        {
+            collision.gameObject.GetComponent<PlayerController>().Die();
+        }
+    }
 }
